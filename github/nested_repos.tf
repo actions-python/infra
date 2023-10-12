@@ -17,6 +17,25 @@ module "github_repository_hello_world_python_action" {
   ]
 }
 
+module "github_repository_infra" {
+  source      = "./modules/github-repository"
+  name        = "infra"
+  description = "An infrastructure as code for GitHub Actions Python"
+
+  branches = [
+    {
+      name    = "main",
+      default = true,
+      protection = {
+        require_signed_commits          = true
+        required_linear_history         = true
+        require_conversation_resolution = true
+        required_pull_request_reviews   = { require_code_owner_reviews = true }
+      }
+    }
+  ]
+}
+
 module "github_repository_python_action" {
   source      = "./modules/github-repository"
   name        = "python-action"

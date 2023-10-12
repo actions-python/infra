@@ -7,11 +7,10 @@ variable "organization_role" {
   default = "member"
 }
 
-variable "team_id" {
-  type = string
-}
-
-variable "team_role" {
-  type    = string
-  default = "member"
+variable "teams" {
+  type = list(object({
+    slug = string
+    role = string
+  }))
+  default = []
 }

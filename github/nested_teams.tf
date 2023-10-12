@@ -14,6 +14,8 @@ module "github_member_sudosubin" {
   source            = "./modules/github-member"
   username          = "sudosubin"
   organization_role = "admin"
-  team_id           = github_team.maintainers.id
-  team_role         = "maintainer"
+  teams = [
+    { slug = github_team.maintainers.slug, role = "maintainer" },
+    { slug = github_team.reviewers.slug, role = "maintainer" },
+  ]
 }

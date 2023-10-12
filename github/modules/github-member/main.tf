@@ -11,8 +11,14 @@ resource "github_membership" "default" {
   role     = var.organization_role
 }
 
+data "github_team" "default" {
+  for_each = { for team in var.teams : team.slug => team }
+  slug     = each.value.slug
+}
+
 resource "github_team_membership" "default" {
-  team_id  = var.team_id
+  for_each = { for team in var.teams : team.slug => team }
+  team_id  = data.github_team.default[each.value.slug].id
   username = var.username
-  role     = var.team_role
+  role     = each.value.role
 }

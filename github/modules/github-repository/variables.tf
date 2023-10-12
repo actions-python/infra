@@ -72,6 +72,7 @@ variable "labels" {
   default = [
     { name = "bug", color = "d73a4a", description = "Something isn't working" },
     { name = "documentation", color = "0075ca", description = "Improvements or additions to documentation" },
+    { name = "dependabot", color = "0052CC", description = "Updates by Dependabot" },
     { name = "duplicate", color = "cfd3d7", description = "This issue or pull request already exists" },
     { name = "enhancement", color = "a2eeef", description = "New feature or request" },
     { name = "help wanted", color = "008672", description = "Extra attention is needed" },
