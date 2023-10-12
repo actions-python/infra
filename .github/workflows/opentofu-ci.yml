@@ -45,5 +45,5 @@ jobs:
           if [ -n "$(git status --porcelain)" ]; then
             git add --all
             git commit -m "ci(terraform): Update terraform code"
-            git push origin HEAD:$GITHUB_HEAD_REF
+            git push origin
           fi
