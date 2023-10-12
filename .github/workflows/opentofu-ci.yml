@@ -21,10 +21,23 @@ jobs:
       - name: Format
         run: tofu fmt -recursive
 
+      - name: Lock
+        run: |
+          MODULES=("github")
+          for MODULE in "${MODULES[@]}"; do
+            cd "$MODULE"
+            tofu providers lock \
+              -platform=linux_arm64 \
+              -platform=linux_amd64 \
+              -platform=darwin_arm64 \
+              -platform=darwin_amd64
+            cd ..
+          done
+
       - name: Commit and Push
         run: |
-          git config --global user.name "actions-python-ci[bot]"
-          git config --global user.email "147721807+actions-python-ci[bot]@users.noreply.github.com"
+          git config user.name "actions-python-ci[bot]"
+          git config user.email "147721807+actions-python-ci[bot]@users.noreply.github.com"
 
           if [ -n "$(git status --porcelain)" ]; then
             git add --all
