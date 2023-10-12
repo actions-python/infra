@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  opentofu-ci:
+    name: CI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: kislerdm/setup-opentofu@main
+        with:
+          cli_config_credentials_token: ${{ secrets.APP_TERRAFORM_IO_TOKEN }}
+          tofu_version: 1.6.0-alpha1
+
+      - name: Format
+        run: tofu fmt -recursive
+
+      - name: Commit and Push
+        run: |
+          git config --global user.name "actions-python-ci[bot]"
+          git config --global user.email "147721807+actions-python-ci[bot]@users.noreply.github.com"
+
+          if [ -n "$(git status --porcelain)" ]; then
+            git add --all
+            git commit -m "ci(terraform): Update terraform code"
+            git push origin HEAD:$GITHUB_HEAD_REF
+          fi

@@ -36,6 +36,12 @@ module "github_repository_infra" {
   ]
 }
 
+resource "github_actions_secret" "infra" {
+  repository      = module.github_repository_infra.github_repository.name
+  secret_name     = "APP_TERRAFORM_IO_TOKEN"
+  plaintext_value = var.app_terraform_io_token
+}
+
 module "github_repository_python_action" {
   source      = "./modules/github-repository"
   name        = "python-action"

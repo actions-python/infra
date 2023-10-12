@@ -1,0 +1,21 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: "feat(actions)"
+      include: "scope"
+    labels:
+      - "dependabot"
+
+  - package-ecosystem: "terraform"
+    directory: "/github"
+    schedule:
+      interval: "monthly"
+    commit-message:
+      prefix: "feat(terraform)"
+      include: "scope"
+    labels:
+      - "dependabot"
