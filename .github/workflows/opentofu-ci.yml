@@ -21,11 +21,12 @@ jobs:
       - name: Format
         run: tofu fmt -recursive
 
-      - name: Lock
+      - name: Init and Lock
         run: |
           MODULES=("github")
           for MODULE in "${MODULES[@]}"; do
             cd "$MODULE"
+            tofu init
             tofu providers lock \
               -platform=linux_arm64 \
               -platform=linux_amd64 \
