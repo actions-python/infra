@@ -63,6 +63,14 @@ variable "branches" {
   default = []
 }
 
+variable "collaborators" {
+  type = list(object({
+    permission = string
+    team_id    = string
+  }))
+  default = []
+}
+
 variable "labels" {
   type = list(object({
     name        = string

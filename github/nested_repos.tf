@@ -27,12 +27,16 @@ module "github_repository_infra" {
       name    = "main",
       default = true,
       protection = {
-        require_signed_commits          = true
+        require_signed_commits          = false
         required_linear_history         = true
         require_conversation_resolution = true
         required_pull_request_reviews   = { require_code_owner_reviews = true }
       }
     }
+  ]
+
+  collaborators = [
+    { permission = "push", team_id = github_team.reviewers.slug },
   ]
 }
 
