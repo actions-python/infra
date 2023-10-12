@@ -17,3 +17,12 @@ terraform {
     }
   }
 }
+
+provider "github" {
+  owner = "actions-python"
+  app_auth {
+    id              = var.github_provider_app_id
+    installation_id = var.github_provider_app_installation_id
+    pem_file        = var.github_provider_app_pem_file
+  }
+}
