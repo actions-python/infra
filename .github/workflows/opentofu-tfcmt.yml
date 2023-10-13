@@ -29,7 +29,8 @@ jobs:
       - uses: kislerdm/setup-opentofu@main
         with:
           cli_config_credentials_token: ${{ secrets.APP_TERRAFORM_IO_TOKEN }}
-          tofu_version: 1.6.0-alpha1
+          tofu_version: 1.6.0-alpha2
+          tofu_wrapper: "false"
 
       - uses: shmokmt/actions-setup-tfcmt@v2
         with:

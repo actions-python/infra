@@ -15,7 +15,8 @@ jobs:
 
       - uses: kislerdm/setup-opentofu@main
         with:
-          tofu_version: 1.6.0-alpha1
+          tofu_version: 1.6.0-alpha2
+          tofu_wrapper: "false"
 
       - name: Format
         run: tofu fmt -recursive
@@ -41,7 +42,8 @@ jobs:
 
       - uses: kislerdm/setup-opentofu@main
         with:
-          tofu_version: 1.6.0-alpha1
+          tofu_version: 1.6.0-alpha2
+          tofu_wrapper: "false"
 
       - name: Init
         run: tofu init -backend=false
