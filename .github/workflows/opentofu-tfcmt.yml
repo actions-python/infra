@@ -36,22 +36,22 @@ jobs:
           version: v4.7.1
 
       - name: Init
-        run: tofu init
+        run: |
+          tofu init
+          if [ "${{ matrix.module }}" = "github" ]; then
+            {
+              echo "app_terraform_io_token = ${{ secrets.APP_TERRAFORM_IO_TOKEN }}"
+              echo "github_provider_app_id = ${{ secrets.ACTIONS_PYTHON_CI_APP_ID }}"
+              echo "github_provider_app_installation_id = ${{ secrets.ACTIONS_PYTHON_CI_APP_INSTALLATION_ID }}"
+              echo "github_provider_app_pem_file = ${{ secrets.ACTIONS_PYTHON_CI_APP_PEM_FILE }}"
+            } > github.auto.tfvars
+          fi
         working-directory: ${{ matrix.module }}
 
       - name: Plan
         if: ${{ github.event_name == 'pull_request' }}
         run: |
-          tfcmt \
-            -owner ${{ github.event.repository.owner.login }} \
-            -repo ${{ github.event.repository.name }} \
-            -pr ${{ github.event.pull_request.number }} \
-            -var "target:${{ matrix.module }}" \
-            plan -patch -- tofu plan -lock=false -no-color \
-              -var "app_terraform_io_token=${{ secrets.APP_TERRAFORM_IO_TOKEN }}" \
-              -var "github_provider_app_id=${{ secrets.ACTIONS_PYTHON_CI_APP_ID }}" \
-              -var "github_provider_app_installation_id=${{ secrets.ACTIONS_PYTHON_CI_APP_INSTALLATION_ID }}" \
-              -var "github_provider_app_pem_file=${{ secrets.ACTIONS_PYTHON_CI_APP_PEM_FILE }}"
+          tfcmt -var "target:${{ matrix.module }}" plan -patch -- tofu plan -no-color
         env:
           GITHUB_TOKEN: ${{ steps.create-github-app-token.outputs.token }}
         working-directory: ${{ matrix.module }}
@@ -59,16 +59,7 @@ jobs:
       - name: Apply
         if: ${{ github.event_name == 'push' }}
         run: |
-          tfcmt \
-            -owner ${{ github.event.repository.owner.login }} \
-            -repo ${{ github.event.repository.name }} \
-            -sha ${{ github.sha }} \
-            -var "target:${{ matrix.module }}" \
-            apply -- tofu apply -auto-approve \
-              -var "app_terraform_io_token=${{ secrets.APP_TERRAFORM_IO_TOKEN }}" \
-              -var "github_provider_app_id=${{ secrets.ACTIONS_PYTHON_CI_APP_ID }}" \
-              -var "github_provider_app_installation_id=${{ secrets.ACTIONS_PYTHON_CI_APP_INSTALLATION_ID }}" \
-              -var "github_provider_app_pem_file=${{ secrets.ACTIONS_PYTHON_CI_APP_PEM_FILE }}"
+          tfcmt -var "target:${{ matrix.module }}" apply -- tofu apply -auto-approve
         env:
           GITHUB_TOKEN: ${{ steps.create-github-app-token.outputs.token }}
         working-directory: ${{ matrix.module }}
