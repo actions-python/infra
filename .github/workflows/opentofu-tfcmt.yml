@@ -47,7 +47,7 @@ jobs:
             -repo ${{ github.event.repository.name }} \
             -pr ${{ github.event.pull_request.number }} \
             -var "target:${{ matrix.module }}" \
-            plan -patch -- tofu plan -no-color \
+            plan -patch -- tofu plan -lock=false -no-color \
               -var "app_terraform_io_token=${{ secrets.APP_TERRAFORM_IO_TOKEN }}" \
               -var "github_provider_app_id=${{ secrets.ACTIONS_PYTHON_CI_APP_ID }}" \
               -var "github_provider_app_installation_id=${{ secrets.ACTIONS_PYTHON_CI_APP_INSTALLATION_ID }}" \
