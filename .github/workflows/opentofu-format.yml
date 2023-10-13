@@ -34,7 +34,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        module: ["github"]
+        workspace: ["github", "terraform-cloud"]
 
     steps:
       - uses: actions/checkout@v4
@@ -45,17 +45,17 @@ jobs:
 
       - name: Init
         run: tofu init -backend=false
-        working-directory: ${{ matrix.module }}
+        working-directory: ${{ matrix.workspace }}
 
       - name: Lock
         run: tofu providers lock -platform=linux_arm64 -platform=linux_amd64 -platform=darwin_arm64 -platform=darwin_amd64
-        working-directory: ${{ matrix.module }}
+        working-directory: ${{ matrix.workspace }}
 
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
-          name: opentofu-lock-${{ matrix.module }}
-          path: ${{ matrix.module }}/.terraform.lock.hcl
+          name: opentofu-lock-${{ matrix.workspace }}
+          path: ${{ matrix.workspace }}/.terraform.lock.hcl
 
   opentofu-result:
     name: Result
@@ -76,11 +76,6 @@ jobs:
           token: ${{ steps.create-github-app-token.outputs.token }}
           fetch-depth: 0
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || '' }}
-
-      - uses: kislerdm/setup-opentofu@main
-        with:
-          cli_config_credentials_token: ${{ secrets.APP_TERRAFORM_IO_TOKEN }}
-          tofu_version: 1.6.0-alpha1
 
       - uses: actions/download-artifact@v3
         with:

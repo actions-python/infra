@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        module: ["github"]
+        workspace: ["github", "terraform-cloud"]
 
     steps:
       - uses: actions/checkout@v4
@@ -24,7 +24,7 @@ jobs:
 
       - name: Init
         run: tofu init -backend=false
-        working-directory: ${{ matrix.module }}
+        working-directory: ${{ matrix.workspace }}
 
       - uses: actions/cache@v3
         with:
@@ -42,7 +42,7 @@ jobs:
 
       - name: Run tflint
         run: tflint --config=$PWD/../.tflint.hcl --format compact --recursive
-        working-directory: ${{ matrix.module }}
+        working-directory: ${{ matrix.workspace }}
 
   opentofu-trivy:
     name: Trivy
