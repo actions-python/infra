@@ -106,5 +106,5 @@ variable "secrets" {
     value = string
   }))
   default     = []
-  description = "GitHub repository branch configurations"
+  description = "GitHub repository secrets configurations"
 }
