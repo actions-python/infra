@@ -34,7 +34,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        workspace: ["github"]
+        workspace: ["github", "terraform-cloud"]
 
     steps:
       - uses: actions/checkout@v4

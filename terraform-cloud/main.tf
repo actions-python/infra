@@ -6,30 +6,25 @@ terraform {
     organization = "actions-python"
 
     workspaces {
-      name = "github"
+      name = "terraform-cloud"
     }
   }
 
   required_providers {
-    github = {
-      source  = "registry.terraform.io/integrations/github"
-      version = "~> 5.0"
-    }
-
     hcp = {
       source  = "registry.terraform.io/hashicorp/hcp"
       version = "~> 0.73.0"
     }
-  }
-}
 
-provider "github" {
-  owner = "actions-python"
-  app_auth {
-    id              = null
-    installation_id = null
-    pem_file        = null
+    tfe = {
+      source  = "registry.terraform.io/hashicorp/tfe"
+      version = "~> 0.49.0"
+    }
   }
 }
 
 provider "hcp" {}
+
+provider "tfe" {
+  hostname = "app.terraform.io"
+}
