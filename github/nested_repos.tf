@@ -67,4 +67,8 @@ module "github_repository_toolkit" {
       protection = {}
     }
   ]
+
+  collaborators = [
+    { permission = "push", team_id = github_team.reviewers.slug },
+  ]
 }
