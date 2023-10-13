@@ -61,11 +61,11 @@ variable "branches" {
     name    = string
     default = bool
     protection = optional(object({
-      require_signed_commits          = bool
-      required_linear_history         = bool
-      require_conversation_resolution = bool
+      require_signed_commits          = optional(bool, false)
+      required_linear_history         = optional(bool, true)
+      require_conversation_resolution = optional(bool, false)
       required_pull_request_reviews = optional(object({
-        require_code_owner_reviews = bool
+        require_code_owner_reviews = optional(bool, false)
       }))
     }))
   }))

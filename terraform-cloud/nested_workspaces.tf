@@ -8,40 +8,20 @@ module "tfe_workspace_github" {
 
   variables = [
     {
-      key         = "actions_python_ci_app_id"
-      value       = "407232"
-      category    = "terraform"
-      description = "ID of the GitHub App"
-    },
-    {
-      key         = "actions_python_ci_app_pem_file"
-      value       = null # Value was manually edited in Terraform Cloud console
-      category    = "terraform"
-      sensitive   = true
-      description = "PEM file content used by GitHub App"
-    },
-    {
-      key         = "app_terraform_io_token"
-      value       = tfe_organization_token.actions_python.token
-      category    = "terraform"
-      sensitive   = true
-      description = "Token for Terraform Cloud"
-    },
-    {
       key         = "GITHUB_APP_ID"
-      value       = "407232"
+      value       = local.secrets.github_app_id
       category    = "env"
       description = "ID of the GitHub App"
     },
     {
       key         = "GITHUB_APP_INSTALLATION_ID"
-      value       = "42817202"
+      value       = local.secrets.github_app_installation_id
       category    = "env"
       description = "ID of the GitHub App installation"
     },
     {
       key         = "GITHUB_APP_PEM_FILE"
-      value       = null # Value was manually edited in Terraform Cloud console
+      value       = local.secrets.github_app_pem_file
       category    = "env"
       sensitive   = true
       description = "PEM file content used by GitHub App"
@@ -51,6 +31,20 @@ module "tfe_workspace_github" {
       value       = "actions-python"
       category    = "env"
       description = "The name of GitHub owner or organization"
+    },
+    {
+      key         = "HCP_CLIENT_ID"
+      value       = local.secrets.hcp_client_id
+      category    = "env"
+      sensitive   = true
+      description = "HCP Client Id"
+    },
+    {
+      key         = "HCP_CLIENT_SECRET"
+      value       = local.secrets.hcp_client_secret
+      category    = "env"
+      sensitive   = true
+      description = "HCP Client Secret"
     },
   ]
 }
@@ -65,8 +59,22 @@ module "tfe_workspace_terraform_cloud" {
 
   variables = [
     {
+      key         = "HCP_CLIENT_ID"
+      value       = local.secrets.hcp_client_id
+      category    = "env"
+      sensitive   = true
+      description = "HCP Client Id"
+    },
+    {
+      key         = "HCP_CLIENT_SECRET"
+      value       = local.secrets.hcp_client_secret
+      category    = "env"
+      sensitive   = true
+      description = "HCP Client Secret"
+    },
+    {
       key         = "TFE_TOKEN"
-      value       = tfe_organization_token.actions_python.token
+      value       = local.secrets.app_terraform_io_token
       category    = "env"
       sensitive   = true
       description = "Token for Terraform Cloud"

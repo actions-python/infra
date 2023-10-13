@@ -6,14 +6,9 @@ module "github_repository_hello_world_python_action" {
 
   branches = [
     {
-      name    = "main"
-      default = true
-      protection = {
-        require_signed_commits          = false
-        required_linear_history         = true
-        require_conversation_resolution = false
-        required_pull_request_reviews   = { require_code_owner_reviews = false }
-      }
+      name       = "main"
+      default    = true
+      protection = {}
     }
   ]
 }
@@ -28,10 +23,8 @@ module "github_repository_infra" {
       name    = "main"
       default = true
       protection = {
-        require_signed_commits          = true
-        required_linear_history         = true
-        require_conversation_resolution = true
-        required_pull_request_reviews   = { require_code_owner_reviews = true }
+        require_signed_commits        = true
+        required_pull_request_reviews = { require_code_owner_reviews = true }
       }
     }
   ]
@@ -41,9 +34,9 @@ module "github_repository_infra" {
   ]
 
   secrets = [
-    { name = "ACTIONS_PYTHON_CI_APP_ID", value = var.actions_python_ci_app_id },
-    { name = "ACTIONS_PYTHON_CI_APP_PEM_FILE", value = var.actions_python_ci_app_pem_file },
-    { name = "APP_TERRAFORM_IO_TOKEN", value = var.app_terraform_io_token },
+    { name = "ACTIONS_PYTHON_CI_APP_ID", value = local.secrets.github_app_id },
+    { name = "ACTIONS_PYTHON_CI_APP_PEM_FILE", value = replace(local.secrets.github_app_pem_file, "\\n", "\n") },
+    { name = "APP_TERRAFORM_IO_TOKEN", value = local.secrets.app_terraform_io_token },
   ]
 }
 
@@ -55,14 +48,9 @@ module "github_repository_python_action" {
 
   branches = [
     {
-      name    = "main"
-      default = true
-      protection = {
-        require_signed_commits          = false
-        required_linear_history         = true
-        require_conversation_resolution = false
-        required_pull_request_reviews   = { require_code_owner_reviews = false }
-      }
+      name       = "main"
+      default    = true
+      protection = {}
     }
   ]
 }
@@ -74,14 +62,9 @@ module "github_repository_toolkit" {
 
   branches = [
     {
-      name    = "main"
-      default = true
-      protection = {
-        require_signed_commits          = false
-        required_linear_history         = true
-        require_conversation_resolution = false
-        required_pull_request_reviews   = { require_code_owner_reviews = false }
-      }
+      name       = "main"
+      default    = true
+      protection = {}
     }
   ]
 }

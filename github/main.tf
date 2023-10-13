@@ -15,6 +15,11 @@ terraform {
       source  = "registry.terraform.io/integrations/github"
       version = "~> 5.0"
     }
+
+    hcp = {
+      source  = "registry.terraform.io/hashicorp/hcp"
+      version = "~> 0.73.0"
+    }
   }
 }
 
@@ -26,3 +31,5 @@ provider "github" {
     pem_file        = null
   }
 }
+
+provider "hcp" {}
