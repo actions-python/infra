@@ -5,7 +5,10 @@ provider "registry.terraform.io/hashicorp/hcp" {
   version     = "0.73.0"
   constraints = "~> 0.73.0"
   hashes = [
+    "h1:4IMKrEsOjabu/r4G6uw4iVcA2teFWKNjGXuLsUe0i8o=",
     "h1:5yeDP5xFlKA22lxy2aSe9vPlYjW79ZWbFT8Bb+XWe1k=",
+    "h1:Alwid/LEIaSMxDjgts620fo5zOOVrz9FNM2a+vxXZpo=",
+    "h1:nh/KUpOa/B4Kejw+8KAqnp1ed9g69pEs9baYe9MlP1o=",
     "zh:01dd8141e637adc7f6abad42fac75cefbff2de21c1b6141dd88085797bfecb44",
     "zh:0fa82a384b25a58b65523e0ea4768fa1212b1f5cfc0c9379d31162454fedcc9d",
     "zh:169023ccb98b1926b855cba7e59480992b7d132cfc1d9ba5cf5317849140fe5a",
