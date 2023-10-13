@@ -1,0 +1,111 @@
+name: Format
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  opentofu-fmt:
+    name: Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: kislerdm/setup-opentofu@main
+        with:
+          tofu_version: 1.6.0-alpha1
+
+      - name: Format
+        run: tofu fmt -recursive
+
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: opentofu-fmt
+          path: |
+            ./**/*.tf
+            ./**/*.tfvars
+
+  opentofu-lock:
+    name: Lock
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        module: ["github"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: kislerdm/setup-opentofu@main
+        with:
+          tofu_version: 1.6.0-alpha1
+
+      - name: Init
+        run: tofu init -backend=false
+        working-directory: ${{ matrix.module }}
+
+      - name: Lock
+        run: tofu providers lock -platform=linux_arm64 -platform=linux_amd64 -platform=darwin_arm64 -platform=darwin_amd64
+        working-directory: ${{ matrix.module }}
+
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: opentofu-lock-${{ matrix.module }}
+          path: ${{ matrix.module }}/.terraform.lock.hcl
+
+  opentofu-result:
+    name: Result
+    runs-on: ubuntu-latest
+    needs: [opentofu-fmt, opentofu-lock]
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/create-github-app-token@v1
+        id: create-github-app-token
+        with:
+          app-id: ${{ secrets.ACTIONS_PYTHON_CI_APP_ID }}
+          private-key: ${{ secrets.ACTIONS_PYTHON_CI_PRIVATE_KEY }}
+
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ steps.create-github-app-token.outputs.token }}
+          fetch-depth: 0
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || '' }}
+
+      - uses: kislerdm/setup-opentofu@main
+        with:
+          cli_config_credentials_token: ${{ secrets.APP_TERRAFORM_IO_TOKEN }}
+          tofu_version: 1.6.0-alpha1
+
+      - uses: actions/download-artifact@v3
+        with:
+          path: artifacts
+
+      - name: Gather Artifacts
+        id: gather-artifacts
+        run: |
+          find "artifacts/opentofu-fmt" -type f \
+            | sed "s|artifacts/opentofu-fmt/||g" \
+            | xargs -I{} mv artifacts/opentofu-fmt/{} {}
+
+          find "artifacts" -maxdepth 1 -type d \
+            | grep "opentofu-lock-" \
+            | sed -e "s|.*/opentofu-lock-||g" \
+            | xargs -I{} mv artifacts/opentofu-lock-{}/.terraform.lock.hcl {}/.terraform.lock.hcl
+
+          if [ -n "$(git status --porcelain)" ]; then
+            git status --porcelain
+            git add --all
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: tyriis/multi-file-commit@v0.3.11
+        if: ${{ steps.gather-artifacts.outputs.changed == 'true' }}
+        with:
+          message: "ci(terraform): Update terraform code"
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || '' }}
+          token: ${{ steps.create-github-app-token.outputs.token }}

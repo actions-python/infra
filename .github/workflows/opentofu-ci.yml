@@ -7,43 +7,51 @@ on:
     types: [opened, reopened, synchronize]
 
 jobs:
-  opentofu-ci:
-    name: CI
+  opentofu-tflint:
+    name: TFLint
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    strategy:
+      matrix:
+        module: ["github"]
+
     steps:
       - uses: actions/checkout@v4
 
       - uses: kislerdm/setup-opentofu@main
         with:
-          cli_config_credentials_token: ${{ secrets.APP_TERRAFORM_IO_TOKEN }}
           tofu_version: 1.6.0-alpha1
 
-      - name: Format
-        run: tofu fmt -recursive
+      - name: Init
+        run: tofu init -backend=false
+        working-directory: ${{ matrix.module }}
 
-      - name: Init and Lock
-        run: |
-          MODULES=("github")
-          for MODULE in "${MODULES[@]}"; do
-            cd "$MODULE"
-            tofu init
-            tofu providers lock \
-              -platform=linux_arm64 \
-              -platform=linux_amd64 \
-              -platform=darwin_arm64 \
-              -platform=darwin_amd64
-            cd ..
-          done
+      - uses: actions/cache@v3
+        with:
+          path: ~/.tflint.d/plugins
+          key: ${{ runner.os }}-tflint-${{ hashFiles('.tflint.hcl') }}
 
-      - name: Commit and Push
-        run: |
-          git config user.name "actions-python-ci[bot]"
-          git config user.email "147721807+actions-python-ci[bot]@users.noreply.github.com"
+      - uses: terraform-linters/setup-tflint@v4
+        with:
+          tflint_version: v0.48.0
 
-          if [ -n "$(git status --porcelain)" ]; then
-            git add --all
-            git commit -m "ci(terraform): Update terraform code"
-            git push origin HEAD:${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
-          fi
+      - name: Init tflint
+        run: tflint --init
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Run tflint
+        run: tflint --config=$PWD/../.tflint.hcl --format compact --recursive
+        working-directory: ${{ matrix.module }}
+
+  opentofu-trivy:
+    name: Trivy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: "config"
+          scan-ref: "."
+          format: "table"
+          exit-code: "1"

@@ -1,10 +1,12 @@
 variable "username" {
-  type = string
+  type        = string
+  description = "GitHub username"
 }
 
 variable "organization_role" {
-  type    = string
-  default = "member"
+  type        = string
+  default     = "member"
+  description = "GitHub role in organization"
 }
 
 variable "teams" {
@@ -12,5 +14,6 @@ variable "teams" {
     slug = string
     role = string
   }))
-  default = []
+  default     = []
+  description = "GitHub team configurations"
 }

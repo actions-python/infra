@@ -1,50 +1,58 @@
 variable "name" {
-  type = string
+  type        = string
+  description = "The name of the repository"
 }
 
 variable "description" {
-  type    = string
-  default = null
+  type        = string
+  default     = null
+  description = "A description of the repository"
 }
 
 variable "homepage_url" {
-  type    = string
-  default = null
+  type        = string
+  default     = null
+  description = "URL which describes the repository"
 }
 
 variable "visibility" {
   type    = string
   default = "public"
-
   validation {
     condition     = contains(["public", "private"], var.visibility)
     error_message = "Allowed values for visibility are \"public\" or \"private\"."
   }
+  description = "A visibility of the repository"
 }
 
 variable "has_issues" {
-  type    = bool
-  default = true
+  type        = bool
+  default     = true
+  description = "Whether having issues"
 }
 
 variable "has_discussions" {
-  type    = bool
-  default = false
+  type        = bool
+  default     = false
+  description = "Whether having discussions"
 }
 
 variable "is_template" {
-  type    = bool
-  default = false
+  type        = bool
+  default     = false
+  description = "Whether is a template repository"
 }
 
 variable "archived" {
-  type    = bool
-  default = false
+  type        = bool
+  default     = false
+  description = "Whether is archived"
 }
 
 variable "topics" {
-  type    = list(string)
-  default = []
+  type        = list(string)
+  default     = []
+  description = "The list of topics of the repository"
 }
 
 variable "branches" {
@@ -60,7 +68,8 @@ variable "branches" {
       }))
     }))
   }))
-  default = []
+  default     = []
+  description = "GitHub repository branch configurations"
 }
 
 variable "collaborators" {
@@ -68,7 +77,8 @@ variable "collaborators" {
     permission = string
     team_id    = string
   }))
-  default = []
+  default     = []
+  description = "GitHub repository collaborators configurations (only team supported)"
 }
 
 variable "labels" {
@@ -87,4 +97,14 @@ variable "labels" {
     { name = "question", color = "d876e3", description = "Further information is requested" },
     { name = "wontfix", color = "ffffff", description = "This will not be worked on" },
   ]
+  description = "GitHub repository issue labels configurations"
+}
+
+variable "secrets" {
+  type = list(object({
+    name  = string
+    value = string
+  }))
+  default     = []
+  description = "GitHub repository branch configurations"
 }
