@@ -1,17 +1,19 @@
 variable "username" {
-  type = string
+  type        = string
+  description = "GitHub username"
 }
 
 variable "organization_role" {
-  type    = string
-  default = "member"
+  type        = string
+  default     = "member"
+  description = "GitHub role in organization"
 }
 
-variable "team_id" {
-  type = string
-}
-
-variable "team_role" {
-  type    = string
-  default = "member"
+variable "teams" {
+  type = list(object({
+    slug = string
+    role = string
+  }))
+  default     = []
+  description = "GitHub team configurations"
 }

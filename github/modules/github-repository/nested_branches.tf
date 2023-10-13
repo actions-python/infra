@@ -5,7 +5,7 @@ resource "github_branch" "default" {
 }
 
 resource "github_branch_default" "default" {
-  for_each   = { for branch in var.branches : branch.name => branch if lookup(branch, "default") }
+  for_each   = { for branch in var.branches : branch.name => branch if branch["default"] }
   repository = github_repository.default.name
   branch     = each.value.name
 
@@ -15,7 +15,7 @@ resource "github_branch_default" "default" {
 }
 
 resource "github_branch_protection" "default" {
-  for_each                        = { for branch in var.branches : branch.name => branch if lookup(branch, "protection") != null }
+  for_each                        = { for branch in var.branches : branch.name => branch if branch["protection"] != null }
   repository_id                   = github_repository.default.node_id
   pattern                         = each.value.name
   require_signed_commits          = each.value.protection.require_signed_commits
