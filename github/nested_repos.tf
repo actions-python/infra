@@ -41,9 +41,10 @@ module "github_repository_infra" {
   ]
 
   secrets = [
-    { name = "APP_TERRAFORM_IO_TOKEN", value = var.app_terraform_io_token },
     { name = "ACTIONS_PYTHON_CI_APP_ID", value = var.github_provider_app_id },
-    { name = "ACTIONS_PYTHON_CI_PRIVATE_KEY", value = var.github_provider_app_pem_file },
+    { name = "ACTIONS_PYTHON_CI_APP_INSTALLATION_ID", value = var.github_provider_app_installation_id },
+    { name = "ACTIONS_PYTHON_CI_APP_PEM_FILE", value = var.github_provider_app_pem_file },
+    { name = "APP_TERRAFORM_IO_TOKEN", value = var.app_terraform_io_token },
   ]
 }
 
