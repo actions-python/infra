@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        module: ["github"]
+        workspace: ["github"]
 
     steps:
       - uses: actions/checkout@v4
@@ -38,28 +38,28 @@ jobs:
       - name: Init
         run: |
           tofu init
-          if [ "${{ matrix.module }}" = "github" ]; then
+          if [ "${{ matrix.workspace }}" = "github" ]; then
             {
-              echo "app_terraform_io_token = ${{ secrets.APP_TERRAFORM_IO_TOKEN }}"
-              echo "github_provider_app_id = ${{ secrets.ACTIONS_PYTHON_CI_APP_ID }}"
-              echo "github_provider_app_installation_id = ${{ secrets.ACTIONS_PYTHON_CI_APP_INSTALLATION_ID }}"
-              echo "github_provider_app_pem_file = ${{ secrets.ACTIONS_PYTHON_CI_APP_PEM_FILE }}"
+              echo "app_terraform_io_token = \"${{ secrets.APP_TERRAFORM_IO_TOKEN }}\""
+              echo "github_provider_app_id = \"${{ secrets.ACTIONS_PYTHON_CI_APP_ID }}\""
+              echo "github_provider_app_installation_id = \"${{ secrets.ACTIONS_PYTHON_CI_APP_INSTALLATION_ID }}\""
+              echo "github_provider_app_pem_file = \"${{ secrets.ACTIONS_PYTHON_CI_APP_PEM_FILE }}\""
             } > github.auto.tfvars
           fi
-        working-directory: ${{ matrix.module }}
+        working-directory: ${{ matrix.workspace }}
 
       - name: Plan
         if: ${{ github.event_name == 'pull_request' }}
         run: |
-          tfcmt -var "target:${{ matrix.module }}" plan -patch -- tofu plan -no-color
+          tfcmt -var "target:${{ matrix.workspace }}" plan -patch -- tofu plan -no-color
         env:
           GITHUB_TOKEN: ${{ steps.create-github-app-token.outputs.token }}
-        working-directory: ${{ matrix.module }}
+        working-directory: ${{ matrix.workspace }}
 
       - name: Apply
         if: ${{ github.event_name == 'push' }}
         run: |
-          tfcmt -var "target:${{ matrix.module }}" apply -- tofu apply -auto-approve
+          tfcmt -var "target:${{ matrix.workspace }}" apply -- tofu apply -auto-approve
         env:
           GITHUB_TOKEN: ${{ steps.create-github-app-token.outputs.token }}
-        working-directory: ${{ matrix.module }}
+        working-directory: ${{ matrix.workspace }}
