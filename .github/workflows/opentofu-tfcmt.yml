@@ -10,7 +10,7 @@ on:
 
 jobs:
   opentofu-tfcmt:
-    name: ${{ github.event_name == 'push' && 'Apply' || 'Plan' }}
+    name: ${{ github.event_name == 'push' && 'Apply (${{ matrix.workspace }})' || 'Plan (${{ matrix.workspace }})' }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -45,6 +45,7 @@ jobs:
           tfcmt -var "target:${{ matrix.workspace }}" plan -patch -- tofu plan -no-color
         env:
           GITHUB_TOKEN: ${{ steps.create-github-app-token.outputs.token }}
+          TFE_TOKEN: ${{ secrets.APP_TERRAFORM_IO_TOKEN }}
         working-directory: ${{ matrix.workspace }}
 
       - name: Apply
@@ -53,4 +54,5 @@ jobs:
           tfcmt -var "target:${{ matrix.workspace }}" apply -- tofu apply -auto-approve
         env:
           GITHUB_TOKEN: ${{ steps.create-github-app-token.outputs.token }}
+          TFE_TOKEN: ${{ secrets.APP_TERRAFORM_IO_TOKEN }}
         working-directory: ${{ matrix.workspace }}
