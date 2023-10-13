@@ -1,11 +1,11 @@
 resource "github_team" "maintainers" {
-  name        = "Maintainers"
+  name        = "maintainers"
   description = "GitHub Actions Python maintainers"
   privacy     = "closed"
 }
 
 resource "github_team" "reviewers" {
-  name        = "Reviewers"
+  name        = "reviewers"
   description = "GitHub Actions Python reviewers"
   privacy     = "closed"
 }

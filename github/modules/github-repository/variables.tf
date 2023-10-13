@@ -16,13 +16,14 @@ variable "homepage_url" {
 }
 
 variable "visibility" {
-  type    = string
-  default = "public"
+  type        = string
+  default     = "public"
+  description = "A visibility of the repository"
+
   validation {
     condition     = contains(["public", "private"], var.visibility)
     error_message = "Allowed values for visibility are \"public\" or \"private\"."
   }
-  description = "A visibility of the repository"
 }
 
 variable "has_issues" {

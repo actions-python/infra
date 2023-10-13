@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        workspace: ["github"]
+        workspace: ["github", "terraform-cloud"]
 
     steps:
       - uses: actions/checkout@v4
@@ -36,16 +36,7 @@ jobs:
           version: v4.7.1
 
       - name: Init
-        run: |
-          tofu init
-          if [ "${{ matrix.workspace }}" = "github" ]; then
-            {
-              echo "app_terraform_io_token = \"${{ secrets.APP_TERRAFORM_IO_TOKEN }}\""
-              echo "github_provider_app_id = \"${{ secrets.ACTIONS_PYTHON_CI_APP_ID }}\""
-              echo "github_provider_app_installation_id = \"${{ secrets.ACTIONS_PYTHON_CI_APP_INSTALLATION_ID }}\""
-              echo "github_provider_app_pem_file = \"${{ secrets.ACTIONS_PYTHON_CI_APP_PEM_FILE }}\""
-            } > github.auto.tfvars
-          fi
+        run: tofu init
         working-directory: ${{ matrix.workspace }}
 
       - name: Plan

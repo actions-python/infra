@@ -1,23 +1,15 @@
-variable "app_terraform_io_token" {
+variable "actions_python_ci_app_id" {
   type        = string
-  sensitive   = true
-  description = "Terraform Cloud api token for organization"
-}
-
-variable "github_provider_app_id" {
-  type        = string
-  sensitive   = true
   description = "ID of the GitHub App"
 }
 
-variable "github_provider_app_installation_id" {
+variable "actions_python_ci_app_pem_file" {
   type        = string
-  sensitive   = true
-  description = "ID of the GitHub App installation"
+  description = "PEM file content used by GitHub App"
 }
 
-variable "github_provider_app_pem_file" {
+variable "app_terraform_io_token" {
   type        = string
   sensitive   = true
-  description = "GitHub App private key PEM file content"
+  description = "Token for Terraform Cloud"
 }
