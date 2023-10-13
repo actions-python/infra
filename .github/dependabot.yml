@@ -17,3 +17,12 @@ updates:
       prefix: "ci(terraform)"
     labels:
       - "dependabot"
+
+  - package-ecosystem: "terraform"
+    directory: "/terraform-cloud"
+    schedule:
+      interval: "monthly"
+    commit-message:
+      prefix: "ci(terraform)"
+    labels:
+      - "dependabot"
