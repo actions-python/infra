@@ -13,7 +13,7 @@ terraform {
   required_providers {
     hcp = {
       source  = "registry.terraform.io/hashicorp/hcp"
-      version = "~> 0.73.0"
+      version = "~> 0.75.0"
     }
 
     tfe = {
