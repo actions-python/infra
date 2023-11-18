@@ -13,9 +13,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: opentofu/setup-opentofu@v1.0.1
+      - uses: opentofu/setup-opentofu@v1
         with:
-          tofu_version: 1.6.0-alpha2
+          tofu_version: 1.6.0-alpha5
           tofu_wrapper: "false"
 
       - name: Format
@@ -40,9 +40,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: opentofu/setup-opentofu@v1.0.1
+      - uses: opentofu/setup-opentofu@v1
         with:
-          tofu_version: 1.6.0-alpha2
+          tofu_version: 1.6.0-alpha5
           tofu_wrapper: "false"
 
       - name: Init

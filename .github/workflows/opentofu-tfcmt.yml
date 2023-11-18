@@ -26,10 +26,10 @@ jobs:
           app-id: ${{ secrets.ACTIONS_PYTHON_CI_APP_ID }}
           private-key: ${{ secrets.ACTIONS_PYTHON_CI_APP_PEM_FILE }}
 
-      - uses: opentofu/setup-opentofu@v1.0.1
+      - uses: opentofu/setup-opentofu@v1
         with:
           cli_config_credentials_token: ${{ secrets.APP_TERRAFORM_IO_TOKEN }}
-          tofu_version: 1.6.0-alpha2
+          tofu_version: 1.6.0-alpha5
           tofu_wrapper: "false"
 
       - uses: shmokmt/actions-setup-tfcmt@v2
