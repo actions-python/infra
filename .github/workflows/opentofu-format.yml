@@ -22,7 +22,7 @@ jobs:
         run: tofu fmt -recursive
 
       - name: Upload
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: opentofu-fmt
           path: |
@@ -54,7 +54,7 @@ jobs:
         working-directory: ${{ matrix.workspace }}
 
       - name: Upload
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: opentofu-lock-${{ matrix.workspace }}
           path: ${{ matrix.workspace }}/.terraform.lock.hcl
