@@ -27,7 +27,7 @@ jobs:
         run: tofu init -backend=false
         working-directory: ${{ matrix.workspace }}
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: ~/.tflint.d/plugins
           key: ${{ runner.os }}-tflint-${{ hashFiles('.tflint.hcl') }}
