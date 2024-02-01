@@ -101,7 +101,7 @@ jobs:
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - uses: tyriis/multi-file-commit@v0.3.11
+      - uses: tyriis/multi-file-commit@v0.3.14
         if: ${{ steps.gather-artifacts.outputs.changed == 'true' }}
         with:
           message: "ci(terraform): Update terraform code"
